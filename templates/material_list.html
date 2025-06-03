@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+
+{% block title %}Tananyagok{% endblock %}
+
+{% block page_header %}
+<h1>Tananyagok</h1>
+{% endblock %}
+
+{% block content %}
+    {% if materials %}
+        <ul class="item-list material-list">
+            {% for material in materials %}
+            <li class="list-item {% if material.read %}read{% endif %}">
+                <div class="item-info">
+                    <h3><a href="{{ url_for('study_material_detail_page', material_id=material.id) }}">{{ material.title }}</a></h3>
+                    <p class="summary">{{ material.summary }}</p>
+                </div>
+                <div class="material-actions">
+                    {% if material.read %}
+                        <span class="status-text completed">📖 Elolvasva</span>
+                    {% else %}
+                        <span class="status-text incomplete">Még olvasatlan</span>
+                    {% endif %}
+                    <a href="{{ url_for('study_material_detail_page', material_id=material.id) }}" class="read-more">Olvasás &raquo;</a>
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p style_marginTop="text-align:center; margin-top: 30px; font-size: 1.1em;">Jelenleg nincsenek elérhető tananyagok.</p>
+    {% endif %}
+{% endblock %}
+
+{% block security_footer %}
+<p>Böngészd tananyagainkat, hogy felkészültebb legyél a programozási feladatokra!</p>
+{% endblock %}

@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% block title %}{{ task.title if task else 'Programozási Feladat' }} - Megoldás{% endblock %}
+
+{% block page_header %}
+<h1>Programozási Feladat</h1>
+{% endblock %}
+
+{% block content %}
+    <div class="back-link-container">
+        <a href="{{ url_for('list_tasks_page') }}" class="back-link">&laquo; Vissza a feladatlistához</a>
+    </div>
+
+    {% if task %}
+        <h2>{{ task.title }}</h2>
+        <div class="task-description">
+            <p>{{ task.description | safe }}</p>
+        </div>
+        
+        <form action="{{ url_for('submit_solution') }}" method="POST">
+            <input type="hidden" name="task_id" value="{{ task.id }}">
+            <label for="code_editor" class="code-label">Írd ide a Python kódodat (a(z) '{{task.solution_check_function_name}}' függvényt definiáld):</label>
+            <textarea id="code_editor" name="code" spellcheck="false">{{ user_code }}</textarea>
+            <input type="submit" value="Megoldás ellenőrzése">
+        </form>
+    {% else %}
+        <p style="text-align:center; margin-top:30px;">A feladat nem tölthető be.</p>
+    {% endif %}
+{% endblock %}

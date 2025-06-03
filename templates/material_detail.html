@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+
+{% block title %}{{ material.title if material else 'Tananyag' }}{% endblock %}
+
+{% block page_header %}
+<h1>Tananyag</h1>
+{% endblock %}
+
+{% block content %}
+    <div class="back-link-container">
+        <a href="{{ url_for('list_study_materials_page') }}" class="back-link">&laquo; Vissza a tananyagok listájához</a>
+    </div>
+
+    {% if material %}
+        <h2>{{ material.title }}</h2>
+        <div class="material-content">
+            {{ material.content | safe }}
+        </div>
+    {% else %}
+        <p style="text-align:center; margin-top:30px;">A tananyag nem tölthető be.</p>
+    {% endif %}
+{% endblock %}
+
+{% block security_footer %}
+<p>Reméljük, hasznosnak találtad ezt a tananyagot!</p>
+{% endblock %}

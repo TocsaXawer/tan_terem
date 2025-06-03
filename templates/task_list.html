@@ -1,0 +1,38 @@
+{% extends "base.html" %}
+
+{% block title %}Feladatok - Programozási Kihívások{% endblock %}
+
+{% block page_header %}
+<h1>Programozási Feladatok</h1>
+{% endblock %}
+
+{% block content %}
+    {% if tasks %}
+        <ul class="item-list task-list">
+            {% for task_item in tasks %}
+            <li class="list-item">
+                <div class="item-info">
+                    <h3><a href="{{ url_for('programming_task_page', task_id=task_item.id) }}">{{ task_item.title }}</a></h3>
+                    <p class="description-short">{{ task_item.description_short }}</p>
+                    <p class="reward">Jutalom: <strong>{{ task_item.xp_reward }} XP</strong></p>
+                </div>
+                <div class="task-status">
+                    {% if task_item.completed %}
+                        <span class="status-text completed">✅ Megoldva</span>
+                        <a href="{{ url_for('programming_task_page', task_id=task_item.id) }}" class="action-button review-button">Megoldás</a>
+                    {% else %}
+                        <span class="status-text incomplete">Még megoldatlan</span>
+                        <a href="{{ url_for('programming_task_page', task_id=task_item.id) }}" class="action-button attempt-button">Kihívás!</a>
+                    {% endif %}
+                </div>
+            </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p style="text-align:center; margin-top: 30px; font-size: 1.1em;">Jelenleg nincsenek elérhető feladatok.</p>
+    {% endif %}
+{% endblock %}
+
+{% block security_footer %}
+<p>Ez az oldal programozási feladatokat tartalmaz. Sok sikert a megoldásukhoz!</p>
+{% endblock %}

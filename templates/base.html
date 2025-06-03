@@ -1,0 +1,168 @@
+<!DOCTYPE html>
+<html lang="hu">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Programozási Platform{% endblock %}</title>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary-color: #007bff; --primary-hover-color: #0056b3;
+            --success-color: #28a745; --error-color: #dc3545; --info-color: #17a2b8;
+            --text-color: #343a40; --light-text-color: #6c757d;
+            --background-color: #f8f9fa; --container-background: #ffffff;
+            --border-color: #dee2e6; --light-border-color: #e9ecef;
+            --font-family-sans-serif: 'Open Sans', sans-serif;
+            --box-shadow: 0 4px 12px rgba(0,0,0,0.08); --border-radius: 8px;
+        }
+        body { 
+            font-family: var(--font-family-sans-serif); 
+            margin: 0; 
+            background-color: var(--background-color); 
+            color: var(--text-color); 
+            line-height: 1.6; 
+            padding: 20px;
+            display: flex; /* For centering container if content is short */
+            flex-direction: column; /* Stack header, content, footer */
+            min-height: 100vh; /* Ensure footer is at bottom */
+        }
+        .site-header { /* Optional header for consistent branding */
+            width: 100%;
+            padding: 10px 0;
+            margin-bottom: 10px; /* Space between header and main container */
+        }
+        .container { 
+            width: 100%; /* Full width up to max-width */
+            max-width: 900px; 
+            margin: 0 auto 20px auto; /* Auto margins for centering, space at bottom */
+            background: var(--container-background); 
+            padding: 30px; 
+            border-radius: var(--border-radius); 
+            box-shadow: var(--box-shadow);
+            animation: fadeInContainer 0.6s ease-out forwards;
+            flex-grow: 1; /* Allow container to grow and push footer down */
+        }
+        @keyframes fadeInContainer { from { opacity: 0; transform: translateY(15px); } to { opacity: 1; transform: translateY(0); } }
+        
+        h1 { color: var(--primary-color); text-align: center; margin-top:0; margin-bottom: 15px; font-weight: 700; font-size: 2em; }
+        h2 { color: var(--primary-color); margin-top: 30px; margin-bottom: 15px; border-bottom: 2px solid var(--primary-color); padding-bottom: 8px; font-weight: 600; font-size: 1.6em;}
+        h3 { color: var(--primary-color); font-weight: 600; font-size: 1.3em; }
+        h4 { color: var(--text-color); margin-top: 20px; margin-bottom: 10px; font-weight: 600; }
+
+        .xp-display { font-size: 1.1em; font-weight: 600; color: var(--success-color); margin-bottom: 10px; text-align: right; padding: 8px 12px; background-color: #e6f7ee; border-radius:var(--border-radius); display:inline-block; float:right; border: 1px solid var(--success-color); }
+        .flashes { list-style-type: none; padding: 0; margin-top: 10px; clear:both; }
+        .flashes li { padding: 15px 20px; margin-bottom: 15px; border-radius: var(--border-radius); border-left-width: 5px; border-left-style: solid; animation: fadeInFlash 0.5s ease-out forwards; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+        @keyframes fadeInFlash { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
+        .flashes .success { background-color: #d4edda; color: #155724; border-left-color: var(--success-color); }
+        .flashes .error { background-color: #f8d7da; color: #721c24; border-left-color: var(--error-color); }
+        .flashes .info { background-color: #d1ecf1; color: #0c5460; border-left-color: var(--info-color); }
+        .clearfix::after { content: ""; clear: both; display: table; }
+
+        .main-nav { text-align: center; margin-bottom: 30px; padding: 10px 0; background-color: var(--light-border-color); border-radius: var(--border-radius); }
+        .main-nav a { color: var(--primary-color); text-decoration: none; font-weight: 600; padding: 10px 20px; margin: 0 5px; border-radius: var(--border-radius); transition: background-color 0.3s ease, color 0.3s ease; }
+        .main-nav a:hover, .main-nav a.active { background-color: var(--primary-color); color: white; }
+        
+        .security-warning { font-size:0.9em; color: #856404; background-color: #fff3cd; padding: 15px; border: 1px solid #ffeeba; border-radius: var(--border-radius); margin-top: 40px; }
+        
+        .back-link-container { margin-bottom: 25px; }
+        .back-link { display: inline-block; color: var(--primary-color); text-decoration: none; font-weight: 600; padding: 8px 15px; border: 1px solid var(--light-border-color); border-radius: var(--border-radius); transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease; }
+        .back-link:hover { background-color: var(--light-border-color); border-color: var(--border-color); color: var(--primary-hover-color); }
+
+        /* Task List & Material List Item Styles (Commonality) */
+        .item-list { list-style-type: none; padding: 0; margin-top: 0px;}
+        .list-item { background: #fdfdff; margin-bottom: 20px; padding: 20px 25px; border-radius: var(--border-radius); border: 1px solid var(--light-border-color); transition: box-shadow 0.3s ease, transform 0.2s ease; display: flex; flex-wrap: wrap; justify-content: space-between; align-items: center; }
+        .list-item:hover { box-shadow: 0 6px 18px rgba(0,0,0,0.1); transform: translateY(-4px); }
+        .item-info { flex-grow: 1; }
+        .item-info h3 { margin-top: 0; margin-bottom: 8px; font-size: 1.3em;}
+        .item-info h3 a { color: var(--primary-color); text-decoration: none; font-weight: 600;}
+        .item-info h3 a:hover { text-decoration: underline; color: var(--primary-hover-color); }
+        .item-info .description-short, .item-info .summary { margin-bottom: 10px; color: var(--light-text-color); font-size: 0.95em; }
+        .item-info .reward { font-size: 0.9em; color: var(--text-color); }
+        .item-actions, .task-status, .material-actions { text-align: right; min-width: 180px; margin-left: 15px; flex-shrink: 0; } /* Added flex-shrink */
+        .status-text { display: block; margin-bottom: 10px; font-weight: 600; font-size:0.9em; }
+        .status-text.completed { color: var(--success-color); }
+        .status-text.incomplete { color: var(--light-text-color); }
+        .action-button, .read-more { display: inline-block; color: white !important; padding: 10px 18px; text-decoration: none; border-radius: var(--border-radius); font-size: 0.95em; font-weight: 600; transition: background-color 0.3s ease, transform 0.2s ease; text-align: center; }
+        .action-button:hover, .read-more:hover { transform: translateY(-2px); }
+        .attempt-button { background-color: var(--primary-color); }
+        .attempt-button:hover { background-color: var(--primary-hover-color); }
+        .review-button { background-color: var(--success-color); }
+        .review-button:hover { background-color: #218838; }
+        .read-more { background-color: var(--primary-color); }
+        .read-more:hover { background-color: var(--primary-hover-color); }
+        .list-item.read { border-left: 5px solid var(--success-color); background-color: #f0fff0; } /* For read study materials */
+
+        /* Test Results Styles (from task_attempt) */
+        .flashes h4 { margin-top: 0.5em; margin-bottom: 0.5em; font-size: 1.1em; }
+        .flashes ul.test-results-list { margin-top: 0.5em; padding-left: 0px; list-style-type:none; }
+        .test-result-item { margin-bottom: 12px; padding: 12px; border: 1px solid var(--border-color); border-radius: var(--border-radius); background-color: var(--container-background); border-left-width: 5px; border-left-style: solid; transition: box-shadow 0.3s ease; }
+        .test-result-item:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.07); }
+        .test-result-item.passed { border-left-color: var(--success-color); }
+        .test-result-item.failed { border-left-color: var(--error-color); }
+        .test-result-header { margin-bottom: 8px; font-size: 1.05em; }
+        .test-result-header .status-icon { margin-right: 8px; font-size: 1.2em; }
+        .test-result-item.passed .status-icon { color: var(--success-color); }
+        .test-result-item.failed .status-icon { color: var(--error-color); }
+        .test-result-detail { font-size: 0.95em; margin-left: 25px; margin-bottom: 4px; color: var(--light-text-color); }
+        .test-result-detail .label { display: inline-block; min-width: 110px; font-weight: 600; color: var(--text-color); }
+        .test-result-detail code { background-color: var(--light-border-color); padding: 2px 5px; border-radius: 3px; font-family: 'Courier New', Courier, monospace; color: var(--text-color); }
+        .test-result-detail.error-detail { color: var(--error-color); font-style: italic; font-weight: 600; }
+
+        /* Material Detail Content Styles */
+        .material-content { margin-top: 20px; line-height: 1.7; font-size: 1.05em; }
+        .material-content h2 { font-size: 1.5em; color: var(--text-color); border-bottom: 1px solid var(--border-color); padding-bottom: 5px; margin-top: 25px; margin-bottom: 12px; }
+        .material-content h3 { font-size: 1.2em; color: var(--text-color); margin-top: 20px; margin-bottom: 8px; }
+        .material-content p { margin-bottom: 1em; }
+        .material-content ul, .material-content ol { margin-left: 20px; margin-bottom: 1em; padding-left: 20px;}
+        .material-content li { margin-bottom: 0.5em; }
+        .material-content pre { background-color: var(--light-border-color); padding: 15px; border-radius: var(--border-radius); overflow-x: auto; border: 1px solid #ced4da; box-shadow: 0 2px 4px rgba(0,0,0,0.05); margin: 20px 0; }
+        .material-content code { font-family: 'Courier New', Courier, monospace; font-size: 0.95em; background-color: rgba(0,123,255,0.05); padding: 2px 4px; border-radius: 3px; color: #c7254e; }
+        .material-content pre code { background-color: transparent; padding: 0; border-radius: 0; color: var(--text-color); font-size: 0.9em; }
+        
+        /* Task Attempt Specific Styles */
+        .task-description { background-color: #fdfdff; padding: 20px; border: 1px solid var(--light-border-color); border-radius: var(--border-radius); margin-bottom: 25px; font-size: 1.05em; }
+        .task-description p { margin: 0.7em 0; }
+        textarea#code_editor { width: 100%; min-height: 300px; padding: 12px; border: 1px solid var(--border-color); border-radius: var(--border-radius); font-family: 'Courier New', Courier, monospace; font-size: 14px; margin-bottom: 20px; box-sizing: border-box; white-space: pre; overflow-wrap: normal; overflow-x: auto; transition: border-color 0.3s ease, box-shadow 0.3s ease; }
+        textarea#code_editor:focus { border-color: var(--primary-color); box-shadow: 0 0 0 0.2rem rgba(0,123,255,.25); outline: none; }
+        input[type="submit"] { background-color: var(--primary-color); color: white; padding: 12px 25px; border: none; border-radius: var(--border-radius); cursor: pointer; font-size: 16px; font-weight: 600; transition: background-color 0.3s ease, transform 0.2s ease; display: block; margin: 20px auto 0 auto; }
+        input[type="submit"]:hover { background-color: var(--primary-hover-color); transform: translateY(-2px); }
+        input[type="submit"]:active { transform: translateY(0px); }
+        .code-label {font-weight: 600; margin-bottom: 10px; display: block; font-size: 1.1em;}
+
+    </style>
+    {% block head_extra %}{% endblock %}
+</head>
+<body>
+    <div class="site-header">
+        </div>
+    <div class="container">
+        <div class="xp-display">Aktuális XP: {{ current_xp }}</div>
+        {% block page_header %}
+        <h1>Programozási Platform</h1> {# Default H1, child can override #}
+        {% endblock %}
+        <div class="clearfix"></div>
+        <nav class="main-nav">
+            <a href="{{ url_for('list_tasks_page') }}" class="{{ 'active' if active_page == 'tasks' }}">Feladatok</a>
+            <a href="{{ url_for('list_study_materials_page') }}" class="{{ 'active' if active_page == 'materials' }}">Tananyagok</a>
+        </nav>
+
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            <ul class="flashes">
+            {% for category, message in messages %}
+              <li class="{{ category }}">{{ message | safe }}</li>
+            {% endfor %}
+            </ul>
+          {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+        
+        <div class="security-warning" style="margin-top: 30px;">
+             {% block security_footer %}
+            <p><b>Fontos biztonsági figyelmeztetés:</b> Ez az alkalmazás egy egyszerűsített példa a kódellenőrzésre, és <strong>NEM BIZTONSÁGOS éles környezetben</strong>.</p>
+            {% endblock %}
+        </div>
+    </div>
+</body>
+</html>
